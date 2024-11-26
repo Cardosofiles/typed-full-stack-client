@@ -22,27 +22,13 @@ import type {
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query'
-export type GetUsersById404 = {
-  message: string;
-};
-
-export type GetUsersById200 = {
-  id: string;
-  name: string;
-};
-
-export type GetUser200Item = {
-  id: string;
-  name: string;
-};
-
-export type CreateUser201 = { [key: string]: unknown };
-
-export type CreateUserBody = {
-  name: string;
-};
-
-
+import type {
+  CreateUser201,
+  CreateUserBody,
+  GetUser200Item,
+  GetUsersById200,
+  GetUsersById404
+} from '../api.schemas'
 
 
 
@@ -117,8 +103,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?? {};
 
       return useMutation(mutationOptions);
     }
-    
-/**
+    /**
  * List users
  */
 export type getUserResponse = {
@@ -216,7 +201,6 @@ export function useGetUser<TData = Awaited<ReturnType<typeof getUser>>, TError =
 
   return query;
 }
-
 
 
 
@@ -318,7 +302,6 @@ export function useGetUsersById<TData = Awaited<ReturnType<typeof getUsersById>>
 
   return query;
 }
-
 
 
 

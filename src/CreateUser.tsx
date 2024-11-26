@@ -1,21 +1,28 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useCreateUser } from "./http/generated/api";
+import {
+  getGetUserQueryKey,
+  useCreateUser,
+} from "./http/generated/users/users";
 
 const createUserSchema = z.object({
   name: z.string().min(3).max(50),
-  email: z.string().email(),
-  password: z.string().min(8).max(20),
+  // email: z.string().email(),
+  // password: z.string().min(8).max(20),
 });
 
 type CreateUserSchema = z.infer<typeof createUserSchema>;
 
 export function CreateUser() {
+  const queryClient = useQueryClient();
+
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors },
   } = useForm<CreateUserSchema>({
     resolver: zodResolver(createUserSchema),
@@ -23,8 +30,14 @@ export function CreateUser() {
 
   const { mutateAsync: createUser } = useCreateUser();
 
-  function handleCreateUser(data: CreateUserSchema) {
-    createUser({ data: { name: data.name } });
+  async function handleCreateUser(data: CreateUserSchema) {
+    await createUser({ data: { name: data.name } });
+
+    await queryClient.invalidateQueries({
+      queryKey: getGetUserQueryKey(),
+    });
+
+    reset();
   }
 
   return (

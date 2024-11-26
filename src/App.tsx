@@ -1,5 +1,5 @@
 import { CreateUser } from "./CreateUser";
-import { useGetUser } from "./http/generated/api";
+import { useGetUser } from "./http/generated/users/users";
 
 export function App() {
   const { data: users } = useGetUser();
